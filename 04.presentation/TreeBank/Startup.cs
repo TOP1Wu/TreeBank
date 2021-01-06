@@ -5,15 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Tree.Core.Domain.UnitOfWork;
 using Tree.Data.Repositories.Test;
 using Tree.Data.Repositories.Test.Abstractions;
 using Tree.Data.UnitOfWorks;
+using Treebank.Core.Autofac;
 
 namespace TreeBank
 {
@@ -38,6 +34,7 @@ namespace TreeBank
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ServiceLocator.Instance = app.ApplicationServices;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

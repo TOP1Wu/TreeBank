@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tree.Core.Helper;
+using Tree.Core.Redis;
 using Tree.Data.Repositories.Test.Abstractions;
 
 namespace TreeBank.Test
@@ -35,6 +38,32 @@ namespace TreeBank.Test
             var list = TestStudent.Query();
 
             return list;
+        }
+        /// <summary>
+        /// 生成验证码
+        /// </summary>
+        /// <returns></returns>
+        public byte[] ImageVerificationCode()
+        
+        {
+            var image = ImageHelper.CreateVerifyImage(out var code);
+            //将验证码存储到redis中登录时进行判断
+            var redis = RedisHelper.RedisClient();
+            redis.StringSet($"code:{code.ToLower()}", code.ToLower(), TimeSpan.FromMinutes(5));
+            return image.ToArray();
+        }
+
+        /// <summary>
+        /// 图片验证码
+        /// toby 2020-12-11 17:05:57
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ImageVerificationCodes()
+        {
+            var data = ImageVerificationCode();
+            return File(data, @"image/png");
         }
     }
 }
