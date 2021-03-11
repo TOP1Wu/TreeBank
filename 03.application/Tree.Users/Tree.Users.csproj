@@ -6,7 +6,10 @@
 
   <ItemGroup>
     <Folder Include="Test\Requests\" />
-    <Folder Include="Test\Services\Abstractions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
   </ItemGroup>
 
 </Project>

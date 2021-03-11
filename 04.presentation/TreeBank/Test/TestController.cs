@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 using Tree.Core.Helper;
 using Tree.Core.Redis;
 using Tree.Data.Repositories.Test.Abstractions;
+using Tree.Data.UnitOfWorks;
+using Tree.IO.Services.Abstractions;
 
 namespace TreeBank.Test
 {
@@ -27,12 +30,21 @@ namespace TreeBank.Test
         //    await AnnexService.Delete(input);
         //    return JsonSuccess();
         //}
-        public TestController(ITestStudent testStudent)
+        public TestController(
+            ITestStudent testStudent,
+            IImportAndExportService importAndExportService)
         {
             TestStudent = testStudent;
+            ImportAndExportService = importAndExportService;
         }
 
         public ITestStudent TestStudent { get; }
+
+        /// <summary>
+        /// 导出
+        /// </summary>
+        public IImportAndExportService ImportAndExportService  { get; }
+
         public Task<object> Get()
         {
             var list = TestStudent.Query();
@@ -48,8 +60,8 @@ namespace TreeBank.Test
         {
             var image = ImageHelper.CreateVerifyImage(out var code);
             //将验证码存储到redis中登录时进行判断
-            var redis = RedisHelper.RedisClient();
-            redis.StringSet($"code:{code.ToLower()}", code.ToLower(), TimeSpan.FromMinutes(5));
+            //var redis = RedisHelper.RedisClient();
+            //redis.StringSet($"code:{code.ToLower()}", code.ToLower(), TimeSpan.FromMinutes(5));
             return image.ToArray();
         }
 
@@ -64,6 +76,20 @@ namespace TreeBank.Test
         {
             var data = ImageVerificationCode();
             return File(data, @"image/png");
+        }
+
+        /// <summary>
+        /// 导出会员
+        /// Caly 2021-03-8 15:00:00
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> ExportMembers()
+        {
+            var data =  await ImportAndExportService.ExportStudent();
+            //获取文件的ContentType
+            var contentType = new FileExtensionContentTypeProvider().Mappings[".xlsx"];
+            return File(data, contentType, $"ExportMembers_{DateTime.Now.ToFileTime()}.xlsx");
         }
     }
 }

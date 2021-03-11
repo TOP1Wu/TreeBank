@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Tree.Core.Domain.UnitOfWork;
@@ -7,10 +7,6 @@ namespace Tree.Data.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork
     {
-
-        /// <summary>
-        /// 工作单元
-        /// </summary>
         public UnitOfWork(IOptions<DBOption> options)
         {
             _options = options;
@@ -24,6 +20,23 @@ namespace Tree.Data.UnitOfWorks
 
 
         public readonly IOptions<DBOption> _options;
+
+        ///// <summary>
+        ///// 工作单元
+        ///// </summary>
+        //public UnitOfWork(IOptions<Redis> options)
+        //{
+        //    _options = options;
+        //    var dbOption = _options.Value;
+        //    //Connection = new SqlConnection(dbOption.ConnectionString);
+        //    //if (Connection.State == ConnectionState.Closed)
+        //    //{
+        //    //    Connection.Open();
+        //    //}
+        //}
+
+
+        //public readonly IOptions<Redis> _options;
 
         /// <summary>
         /// 连接对象
