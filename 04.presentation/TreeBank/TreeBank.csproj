@@ -7,6 +7,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\02.domain\Tree.Data\Tree.Data.csproj" />
     <ProjectReference Include="..\..\03.application\IO\Tree.IO.csproj" />
+    <ProjectReference Include="..\..\03.application\Tree.Users\Tree.Users.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="img\ImageTest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

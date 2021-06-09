@@ -16,5 +16,7 @@ namespace Tree.IO.Services.Abstractions
         /// </summary>
         /// <returns></returns>
         Task<MemoryStream> ExportStudent();
+
+        object Main(string Content, string Contents);
     }
 }

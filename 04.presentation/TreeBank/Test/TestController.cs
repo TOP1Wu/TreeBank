@@ -11,7 +11,7 @@ using Tree.Core.Redis;
 using Tree.Data.Repositories.Test.Abstractions;
 using Tree.Data.UnitOfWorks;
 using Tree.IO.Services.Abstractions;
-
+using Tree.Users.Test.Services.Abstractions;
 namespace TreeBank.Test
 {
     [Route("Test/[controller]/[action]")]
@@ -90,6 +90,17 @@ namespace TreeBank.Test
             //获取文件的ContentType
             var contentType = new FileExtensionContentTypeProvider().Mappings[".xlsx"];
             return File(data, contentType, $"ExportMembers_{DateTime.Now.ToFileTime()}.xlsx");
+        }
+        /// <summary>
+        /// 导出会员
+        /// Caly 2021-03-8 15:00:00
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public  object Main(string Content, string Contents)
+        {
+            var data= ImportAndExportService.Main( Content, Contents);
+            return  data;
         }
     }
 }
